@@ -98,7 +98,7 @@ function OAuthTokenProvider() {
        */
 
       getTokenType() {
-        const { token_type } = this.getToken() || {};
+        const { token_type = 'bearer' } = this.getToken() || {};
 
         return token_type;
       }
