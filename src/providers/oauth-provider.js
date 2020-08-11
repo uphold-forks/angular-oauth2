@@ -123,12 +123,9 @@ function OAuthProvider() {
       getAccessToken(data, options) {
         data = angular.extend({
           client_id: this.config.clientId,
+          client_secret: this.config.clientSecret,
           grant_type: 'password'
         }, data);
-
-        if (null !== this.config.clientSecret) {
-          data.client_secret = this.config.clientSecret;
-        }
 
         data = queryString.stringify(data);
 

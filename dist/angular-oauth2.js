@@ -14,10 +14,6 @@
     }
 })(this, function(angular, ngCookies, queryString) {
     var ngModule = angular.module("angular-oauth2", [ ngCookies ]).config(oauthConfig).factory("oauthInterceptor", oauthInterceptor).provider("OAuth", OAuthProvider).provider("OAuthToken", OAuthTokenProvider);
-    function oauthConfig($httpProvider) {
-        $httpProvider.interceptors.push("oauthInterceptor");
-    }
-    oauthConfig.$inject = [ "$httpProvider" ];
     function oauthInterceptor($q, $rootScope, OAuthToken) {
         return {
             request: function request(config) {
@@ -119,11 +115,9 @@
                     value: function getAccessToken(data, options) {
                         data = angular.extend({
                             client_id: this.config.clientId,
+                            client_secret: this.config.clientSecret,
                             grant_type: "password"
                         }, data);
-                        if (null !== this.config.clientSecret) {
-                            data.client_secret = this.config.clientSecret;
-                        }
                         data = queryString.stringify(data);
                         options = angular.extend({
                             headers: {
@@ -283,5 +277,9 @@
         };
         this.$get.$inject = [ "$cookies" ];
     }
+    function oauthConfig($httpProvider) {
+        $httpProvider.interceptors.push("oauthInterceptor");
+    }
+    oauthConfig.$inject = [ "$httpProvider" ];
     return ngModule;
 });
